@@ -107,3 +107,36 @@ Speeds:
 14079 words/sec for <__main__.COMBINEDTAGGER instance at 0x1c193e4d0>
 
 So a bit faster than Fahad's.
+
+>>> print showConfusion(tagger.confusion, latex=False)
+
+will tell you about what it gets wrong. For Arabic it seems that the
+biggest sets of errors are that it gets adjectives muddled up with
+nouns and it gets mentions muddled with replies (28 of each are wrong):
+
+JJ	JJ, 184 (0.848), NN, 28 (0.129), VB, 5 (0.023)
+MEN	MEN, 30 (0.517), REP, 28 (0.483)
+
+These don't matter for stemming -- we don't attempt to stem mentions
+or repeats, the stemming for adjectives and nouns is the same. You can
+tell the tagger to treat certain tags as being equivalent by doing 
+
+>>> taggers = fullTest(corpus=ARABIC, mergetags={"JJ":"NN", "REP":"MEN"})
+
+That, obviously enough, improves the reported accuracy on the things
+that it was getting wrong -- all adjectives, including the ones that
+used to be wrongly tagged as nouns, are now correctly tagged as
+nouns. doing this can have knock-on effects on other words (because
+their contexts may be less fine-grained and hence less helpful). Without
+merging we had
+
+VB	VB, 640 (0.976), NN, 15 (0.023), JJ, 1 (0.002)
+
+Afterwards we had
+
+VB	VB, 633 (0.965), NN, 23 (0.035)
+
+Fewer verbs are recognised correctly if we blur the distinction
+between nouns and adjectives. So it goes.
+
+
