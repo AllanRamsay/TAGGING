@@ -16,7 +16,7 @@ in the BASETAGGER, transition probs are just collected. No need for
 any fancy Baum-Welch reestimation. All the probabilities we need can
 just be collected.
 
-CTAGGER: we have table that says how likely the word between a given
+CTAGGER: we have a table that says how likely the word between a given
 pair of tags is to have a specific tag. That's hard to read, what do I
 actually mean? What, for instance, is the most likely thing to occur
 between a determiner and a noun? We look up "AT!!!NN" in the table and
@@ -24,11 +24,11 @@ it says [('AJ', 0.53), ('NN', 0.29), ('NP', 0.09), ('ORD', 0.03),
 ('PUQ', 0.01), ('DT0', 0.01), ('CRD', 0.01)]. In other words, if
 you've got a determiner and then something and then a noun, there's a
 53% chance that the thing in the middle is an adjective, a 29% chance
-that it's a noun, and so on. What of the thing in the middle had been
+that it's a noun, and so on. What if the thing in the middle had been
 "love"? The distribution of tags for "love" is [('NN', 0.75), ('VV',
 0.25)]. Multiply each suggestion made by the context by the intrinsic
 probabilities for the word, highest is the best choice. This is
-infuriatingly simple butnit works *really* well for English.
+infuriatingly simple but it works *really* well for English.
 
 COMBINEDTAGGER: take a set of taggers and combine their results on the
 basis of which one is most confident for each word. This can help if
@@ -54,9 +54,9 @@ is quicker (though not instant, because there's a lot of data in the
 lexicons and all of that has to be re-read).
 
 The accuracy for the various taggers for varying amounts of training
-data for Arabic (based on Fahad's training data, which is not actually
-perfectly representative of his twitter data, so these accuracies may
-be a bit optimistic).
+data for Arabic tweets (based on Fahad's training data, which is not
+actually perfectly representative of his twitter data, so these
+accuracies may be a bit optimistic).
 
 size	base 	vtagger	ctagger	xtagger	known 	lexicon	ftransitions	trigrams
 10K	0.812	0.809	0.808	0.803	0.688	8355	26	263
@@ -96,7 +96,7 @@ For English I get a slightly different picture:
 1280	0.949	0.960	0.966	0.963	0.987	54962	44	1598
 2000	0.950	0.963	0.967	0.965	0.990	75248	44	1631
 
-This based on the BNC, for which the context-tagger seems to be the
+This is based on the BNC, for which the context-tagger seems to be the
 best (better, indeed, than the combination with the HMM).
 
 Speeds:
@@ -126,9 +126,9 @@ tell the tagger to treat certain tags as being equivalent by doing
 That, obviously enough, improves the reported accuracy on the things
 that it was getting wrong -- all adjectives, including the ones that
 used to be wrongly tagged as nouns, are now correctly tagged as
-nouns. doing this can have knock-on effects on other words (because
-their contexts may be less fine-grained and hence less helpful). Without
-merging we had
+nouns. Doing this can have unexpected knock-on effects on other words
+(because their contexts may be less fine-grained and hence less
+helpful). Without merging we had
 
 VB	VB, 640 (0.976), NN, 15 (0.023), JJ, 1 (0.002)
 
